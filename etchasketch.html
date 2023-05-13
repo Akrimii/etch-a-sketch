@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etch-A-Sketch</title>
+</head>
+<body>
+    <div class="container1">
+        <h1>Etch-A-Sketch</h1>
+        <button onclick="setSquares()">Start</button><br>
+        <label for="pen">Select a color:</label>
+        <input type="color" id="pen" name="pen" value="#000000" onchange="letsSketch(this.value)">
+    </div>
+    <div class="container2"></div>
+    <div class="container3"></div>
+
+<style>
+    html {
+        font-family: sans-serif;
+    }
+    .container1 {
+        margin:0;
+    }
+
+    h1 {
+        margin:0;        
+    }
+
+    button {
+        margin-bottom: 10px;
+        margin-top: 10px;
+        border-radius: 5px;
+        border: none;
+        padding: 10px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    button:hover {
+        border-radius: 5px;
+        background-color: rgb(255, 238, 241);
+    }
+
+    #pen {
+        margin-bottom: 10px;
+    }
+
+    .container2 {
+        width:960px;
+        height:960px;
+        flex-grow: 1;
+        display: flex;
+        flex-wrap: wrap; 
+    }
+
+    .container2>div{
+        border: 1px black solid;
+        width: 6%;
+        flex:0 0 6%;
+    }
+
+    .container3 {
+        width: 960px;
+        height:960px;
+        display:grid;
+    }
+
+    .container3>div{
+        border: 1px black solid;
+    }
+
+</style>
+
+<script>
+    const container2=document.querySelector('.container2');
+    const container3=document.querySelector('.container3');
+
+    let i=0
+    while (i<256) {
+        const gridItem=document.createElement('div');
+        gridItem.className=`grid ${i}`;
+        container2.appendChild(gridItem);
+        i++;
+    }
+
+    function setSquares(){
+        const square=parseInt(window.prompt('How many squares per side would you want for the grid? (It cannot be above 100 squares)'));
+        if (square>100){
+            return setSquares();
+        } else {
+            container2.style.display="none";
+            return setNewGrid(square);
+        }
+    }
+
+    function setNewGrid(number){
+        let i=0
+        const totalNewGrid=number**2;
+        while (i<totalNewGrid) {
+            const newGrid=document.createElement('div');
+            newGrid.className=`newgrid ${i}`;
+            container3.appendChild(newGrid);
+            i++;
+        }
+        container3.style.gridTemplateColumns=`repeat(${number},1fr)`;
+        container3.style.gridTemplateRows=`repeat(${number},1fr)`;
+        return letsSketch();
+    }
+
+    function letsSketch(value){
+        const sketchGrids=document.querySelectorAll('.newgrid');
+        sketchGrids.forEach(sketchGrid=>sketchGrid.addEventListener('mouseover',function(){
+            sketchGrid.style.backgroundColor=value;
+        }))
+    }
+
+</script>
+</body>
+</html>
